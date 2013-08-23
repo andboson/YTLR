@@ -1,0 +1,9 @@
+{
+    appinfo_format="1",
+    name="ytlr",
+    version="0.4.5",
+    enabled="1",
+    webui_path="#PATH#",
+    gayaui_path="#PATH#",
+	daemon_script="setup.sh"
+}
