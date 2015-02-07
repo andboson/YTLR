@@ -30,4 +30,7 @@ Keyboard Assignment
 Credits
 -------
 Thanks for idea to http://www.networkedmediatank.com forum and user Mental.
-
+also thanks
+Project: YouTube Downloader^M
+Author: John Eckman^M
+URL: https://github.com/jeckman/YouTube-Downloader^M
