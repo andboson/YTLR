@@ -1,0 +1,16 @@
+bvmy1nffpd8|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=bvmy1nffpd8|
+wndKUkl04W8|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=wndKUkl04W8|
+ZZAULqPN-a4|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=ZZAULqPN-a4|
+--Tw0D2Ra2g|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=--Tw0D2Ra2g|
+EpWMOLf28Zg|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=EpWMOLf28Zg|
+Wmfln_-G048|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=Wmfln_-G048|
+3XAb61HV610|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=3XAb61HV610|
+mLtigedVRlA|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=mLtigedVRlA|
+mImObOgIA3E|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=mImObOgIA3E|
+bKawgSfUgSk|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=bKawgSfUgSk|
+tfK-Rxqijzg|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=tfK-Rxqijzg|
+q3oLkdPh02w|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=q3oLkdPh02w|
+QgKs38uWqGo|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=QgKs38uWqGo|
+owHCCzEKoso|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=owHCCzEKoso|
+Da9C78s9P6U|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=Da9C78s9P6U|
+59kAwwLCYj4|0|0|http://localhost:9999/YTLR_web/YT/getvideo.php?format=ipad&videoid=59kAwwLCYj4|

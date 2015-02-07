@@ -1,3 +1,31 @@
+<form action="index.php" method="GET" id="frm" name="frm">
+    <input type="hidden" id="hdn" name="q" value="">
+    <input type="hidden" id="maxResults" name="maxResults" value="<?=$maxResults?>">
+    <table width="400px;" cellspacing="0" cellpadding="9"><tr>
+            <td width="310px" height="40" background="img/2search.jpg" style="background-repeat:no-repeat;" padding="3px;"><p id="stitle" >&nbsp;</p></td><td align="left"><input type="image" src="img/btn.jpg" align="top"></td>
+        </tr></table>
+</form>
+
+<?php
+$wordsTxt = file_get_contents('hystory.txt');
+$words =  array();
+
+if(!empty($wordsTxt)) {
+    $words = json_decode($wordsTxt, true);
+    echo "<p>";
+    foreach ($words as $word) {
+        echo "<a class='hist' href=\"#\" onclick=\"stype('$word');\">$word</a>&nbsp;&nbsp;&nbsp;";
+    }
+    echo "</p>";
+}
+
+$new = $_GET['q'];
+$words[] = $new;
+$newWords = empty($words) ? array() : array_unique($words);
+$newWords = array_slice($newWords, 0, 10);
+file_put_contents('hystory.txt', json_encode($newWords));
+?>
+
 <table style="color:#A8BC5E;" cellspacing=0 cellpadding=0>
 <tr><td colspan="2">
 <a href="#" onclick="stype('1');">1</a>&nbsp;
@@ -36,7 +64,7 @@
 <a href="#" onclick="stype('B');">В</a>&nbsp;
 <a href="#" onclick="stype('Г');">Г</a>&nbsp;
 <a href="#" onclick="stype('Д');">Д</a>&nbsp;
-<a href="#" onclick="stype('Е');">Е</a>&nbsp;
+<a href="#" onclick="stype('E');">Е</a>&nbsp;
 <a href="#" onclick="stype('Ж');">Ж</a>&nbsp;
 <a href="#" onclick="stype('З');">З</a>&nbsp;
 <a href="#" onclick="stype('И');">И</a>&nbsp;
@@ -99,3 +127,26 @@
 </h4>
 </td><td>
 </tr></table>
+
+
+<script type="text/javascript">
+    function stype(x){
+        document.getElementById('stitle').firstChild.nodeValue=document.getElementById('stitle').firstChild.nodeValue+x.toString();
+        var str=document.getElementById('stitle').firstChild.nodeValue;
+        var ln=str.length;
+        str=str.substr(1,ln-1);
+        document.getElementById('hdn').setAttribute('value',str);
+    }
+
+    function dele(){
+        var str=document.getElementById('stitle').firstChild.nodeValue;
+        var ln=str.length;
+        document.getElementById('stitle').firstChild.nodeValue=str.substr(0,ln-1);
+    }
+
+
+    function name(){
+        document.getElementById('hdn').setAttribute('value','333333333333333333');
+    }
+
+</script>

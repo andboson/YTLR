@@ -1,52 +1,149 @@
 <?php
+
+function googleCache($id,$token,$fmt){
+	 $ytURL = "http://youtube.com/get_video?video_id=" . $id . "&t=" . $token. "&asv=&fmt=" . $fmt;
+//	$ytURL = "http://www.youtube.com/get_video?t=vjVQa1PpcFNqEf7mGOw0Gk9PLbFvsqu0bV2adxLsaKQ=&noflv=1&fmt=34&el=detailpage&video_id=a4D1lIZSck8&asv=3";
+
+	$headers = get_headers($ytURL,1);
+
+//	print_r($headers);
+	$status = explode(" ",$headers['1']);
+	if($status[1] == "200"){
+		if(!is_array($headers['Location'])) {
+		$videoURL = $headers['Location'];
+		}else{
+			foreach($headers['Location'] as $header){
+				if(strpos($header,"googlevideo.com") != false){
+				$videoURL = $header;
+				break;
+				}
+			}
+		}
+	return $videoURL;
+	}else{
+		return "";
+	}
+}
+
 function youtubeData($ido){
-global $ids;
 $content = file_get_contents("http://www.youtube.com/watch?v=".$ido);
- preg_match('~\"t\":\s*\"([^\"]*)\"~',$content,$videoTicketMatches);
-	$ticket=$videoTicketMatches[1];
- preg_match("/\"fmt_url_map\":\s*\"([^\"]*)\"/",$content,$formatmatches);
- $videoFormats=($formatmatches!=null)?$formatmatches[1]:"";
- $sep1="%2C";
- $sep2="%7C";
-  if (stripos($videoFormats,",")>-1) { // new UI
-    $sep1=",";
-    $sep2="|";
-  }
-  $videoFile="";
-  $vfmt=Array();
-  $videoFormatsGroup=explode($sep1,$videoFormats);
-  for ($i=0;$i<count($videoFormatsGroup);$i++){
-    $videoFormatsElem=explode($sep2,$videoFormatsGroup[$i]);
-  	$videoUrl=preg_replace("~\\\/~", "/", $videoFormatsElem[1]);
-switch($videoFormatsElem[0]){
-  case "18":
- 		if (!in_array(35, $vfmt)) $videoFile.= '<a href="'.$videoUrl.'" vod>[view]</a>';
- 		$vfmt[]=18;
-		$ids[]=$videoUrl;
- 		break;
- case "35":
- 		if (!in_array(18, $vfmt)) $videoFile.= '<a href="'.$videoUrl.'" vod>[view]</a>';
- 		$vfmt[]=35;
- 		break;
- case "22":
- 		$videoFile.= '<a href="'.$videoUrl.'" vod>[view in 720p]</a>';
- 		break;
- case "37":
- 		$videoFile.= '<a href="'.$videoUrl.'" vod>[view in 1080p]</a>';
- 		break;
- default:
-    //$videoFile.= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='. $ticket.'&asv=&fmt=18" vod>[view]</a>';
- }
- }
+
+$one=stripos($content,'length_seconds');
+$content=substr($content,$one);
+$one2=stripos($content,'">');
+parse_str($content);
+
+//$videoFile= '<a href="index.php?mode=getvideo&id='.$id.'&token='.$t.'&fmt=18" vod>[view]</a>';
+ // $videoFile="<a href=\"http://youtube.com/get_video?video_id=" . $ido . "&t=" . $t. "&asv=&fmt=18\" vod>[view]</a>";
+//	$content = file_get_contents("http://youtube.com/get_video_info?video_id=".$id);
+	if($t != ""){
+	 $fmts=explode(",",$fmt_map,3);
+	 $fmts[0]=substr($fmts[0],0,2);
+	 $fmts[1]=substr($fmts[1],0,2);
+	 $fmts[2]=substr($fmts[2],0,2);
+    if($fmts[0]==37 or $fmts[0]=='37') {
+	    if($fmts[2]==35 or $fmts[2]=='35') $videoFile.= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=18" vod>[view]</a>';
+	    if($fmts[1]==22 or $fmts[1]=='22') $videoFile.= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=22" vod>[view in 720p]</a>';
+	    if($fmts[0]==37  or $fmts[0]=='37') $videoFile.= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=37" vod>[view in 1080p]</a>';
+	    return $videoFile;
+	    }
+
+    if($fmts[0]==22 or $fmts[0]=='22') {
+	    if($fmts[1]==35 or $fmts[1]=='35') $videoFile.= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=18" vod>[view]</a>';
+	    if($fmts[0]==22 or $fmts[0]=='22') $videoFile.= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=22" vod>[view in 720p]</a>';
+	    return $videoFile;
+	    }
+
+    if($fmts[0]==35 or $fmts[0]=='35') $videoFile= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=18" vod>[view]</a>';
+     // echo "<br>".$id."=".$fmts[0];
+
+	 if($fmts[0]=='18' or $fmts[0]==18) $videoFile= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=18" vod>[view]</a>';
+
+      if ($fmts[0]=='34' or $fmts[0]==34) {
+      	$videoFile="";
+      	return $videoFile;
+      }
+   	}  else if ($status=='failed') {
+	$videoFile=""; //str_ireplace('+',' ',$reason);
+} else {
+	$videoFile= '<a href="http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=18" vod>[view]</a>';
+}
+
+
 return $videoFile;
 }
 
-////////////////////////////////  viewCount
+function youtubeDatalist($ido){
+$content = file_get_contents("http://www.youtube.com/watch?v=".$ido);
+$one=stripos($content,'length_seconds');
+$content=substr($content,$one);
+$one2=stripos($content,'">');
+parse_str($content);
+
+
+	if($t != ""){
+	 $fmts=explode(",",$fmt_map,3);
+	 $fmts[0]=substr($fmts[0],0,2);
+	 $fmts[1]=substr($fmts[1],0,2);
+	 $fmts[2]=substr($fmts[2],0,2);
+    if($fmts[0]==37 or $fmts[0]=='37') {
+	    if($fmts[1]==22 or $fmts[1]=='22') $videoFile.= 'http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=22';
+	    return $videoFile;
+	    }
+
+    if($fmts[0]==22 or $fmts[0]=='22') {
+	    if($fmts[0]==22 or $fmts[0]=='22') $videoFile.= 'http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=22';
+	    return $videoFile;
+	    }
+
+    if($fmts[0]==35 or $fmts[0]=='35') $videoFile= 'http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=18';
+     // echo "<br>".$id."=".$fmts[0];
+
+	 if($fmts[0]=='18' or $fmts[0]==18) $videoFile= 'http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=18';
+
+      if ($fmts[0]=='34' or $fmts[0]==34) {
+      	$videoFile="";
+      	return $videoFile;
+      }
+   	}  else if ($status=='failed') {
+	$videoFile="";
+} else {
+	$videoFile= 'http://youtube.com/get_video?video_id='.$ido.'&t='.$t.'&asv=&fmt=18';
+}
+	return $videoFile;
+}
+
+function echoPlaylist($ids, $getVideo){
+	$ids = explode(":",$ids);
+   		header("Content-Type: x-foo/x-bar");
+		header('Content-Description: File Transfer');
+		header('Content-Transfer-Encoding: binary');
+		header('Content-Disposition: filename="playlist.jsp"');
+		$output="";
+   foreach ($ids as $id){
+     $url=  "http://localhost:9999/YTLR_web/" . $getVideo . '?format=ipad&videoid=' . $id;
+    if(strlen($id)>3) $output.=$id."|0|0|".$url."|\r\n";
+   }
+   echo $output;
+}
+
+
+function savePlaylist($ids, $getVideo){
+	$ids = explode(":",$ids);
+	$output="";
+	foreach ($ids as $id){
+		$url=  "http://localhost:9999/YTLR_web/" . $getVideo . '?format=ipad&videoid=' . $id;
+		if(strlen($id)>3) $output.=$id."|0|0|".$url."|\r\n";
+	}
+
+	file_put_contents('playlist.jsp', $output);
+}
+////////////////////////////////
 //$xml = simplexml_load_file('http://gdata.youtube.com/feeds/api/videos?vq=sand&search_sort=video_avg_rating&racy=include&max-results=5');
 //////////////////////////////////////
 
 function echoVideoList($searchstring)
-{   global $files,$ids;
+{   global $files;
 	$output='<table cellspacing=0>';
     $output.='<tbody width="100%">';
     $plurl="?plist=yes&ids=";
@@ -64,11 +161,6 @@ $result=$xml->entry;
  	 $attrs = $media->group->thumbnail->attributes();
      $Thumnail= $attrs['url'][0];
 
-      // get feed URL for related videos
-      $entry->registerXPathNamespace('feed', 'http://www.w3.org/2005/Atom');
-      $nodeset = $entry->xpath("feed:link[@rel='http://gdata.youtube.com/schemas/2007#video.related']");
-      if (count($nodeset) > 0) $relatedURL = $nodeset[0]['href'];
-
      $yt = $media->children('http://gdata.youtube.com/schemas/2007');
      $attrs = $yt->duration->attributes();
      $seconds = (double)$attrs['seconds'];
@@ -84,21 +176,20 @@ $result=$xml->entry;
 
       if ($gd->rating) {
         $attrs = $gd->rating->attributes();
-        $rating = sprintf("%01.2f", $attrs['average']);
+        $rating = $attrs['average'];
       } else {
         $rating = 0;
       }
      $url=youtubeData($VideoId);
      if (strlen($url)<3) continue;
      $plurl.=$VideoId.":";
-     $relurl="[<a href='index.php?rel=yes&vid=".$VideoId."'>related</a>]";
        $output.=<<<END
         <tr >
         <td width="150px"><img src="${Thumnail}"/></td>
         <td width="500px" >
         ${Title}&nbsp;(${Time})
         <p class="videoDescription">
-            <h3>${url}${relurl}</h3>
+            <h3>${url}</h3>
             Views:&nbsp;${viewCount}&nbsp;&nbsp;Rating:&nbsp;${rating}
         </td>
         </tr>
@@ -106,26 +197,11 @@ $result=$xml->entry;
 END;
     }
     $output.='</table>';
-	echo "<h4><center><a href=\"playlist.jsp\" vod=\"playlist\" >[Play all on this Page]</a></center></h4></br></br>";
+	echo "<h4><center><a href=\"".$plurl."\" vod=\"playlist\" >[Play all on this Page]</a></center></h4></br></br>";
 	echo $output;
-	echo "<h4><center><a href=\"playlist.jsp\" vod=\"playlist\" >[Play all on this Page]</a></center></h4></br></br>";
 
-//////////save playlist
-   	if (!$handle = fopen("playlist.jsp", 'w+')) {
-         echo "unable to open file for write";
-         exit;
-    }
-   foreach ($ids as $id){
-    // $url=youtubeDatalist($id);
-    if(strlen($id)>3) $w=$id."|0|0|".$id."|\n\r\n";
-        if (fwrite($handle, $w) === FALSE) {
-        echo "unable write";
-        exit;
-    }
-   }
-  fclose($handle);
-//////// end save playlist
 }
 //http://www.ibm.com/developerworks/xml/library/x-youtubeapi/
+//include('keys.php');
 //error_reporting(E_ALL);
 ?>
